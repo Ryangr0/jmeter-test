@@ -1,0 +1,20 @@
+version: '3.9'
+
+services:
+  jmeter:
+    image: justb4/jmeter:latest
+    volumes:
+      - ./jmeter-tests:/jmeter/tests:ro
+      - ./jmeter-results:/jmeter/results
+      - ./jmeter-html-report:/jmeter/html-report
+      - ./jmeter-log:/jmeter/logs
+#      - ./jmeter.properties:/jmeter/bin/jmeter.properties
+    environment:
+      - JMETER_TEST_PLAN=/jmeter/tests/elements.jmx
+      - JMETER_LOG_LEVEL=DEBUG
+      - JVM_ARGS=-Xmn1g -Xms2g -Xmx2g -XX:MaxMetaspaceSize=256m
+    command: >
+      -n -t /jmeter/tests/elements.jmx \
+      -l /jmeter/results/elements.jtl \
+      -j /jmeter/logs/elements.log \
+      -e -o /jmeter/html-report/elements
